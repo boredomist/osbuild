@@ -31,14 +31,16 @@ def run(args, test=False, retry=0, watch_log=None):
     while tries < retry + 1:
         tries = tries + 1
 
-        process = plog.LoggedProcess(args, watch_log=watch_log)
-        returncode = process.execute()
-        if returncode != 0:
+        process = plog.LoggedProcess(args)
+        process.execute()
+
+        result = process.wait(watch_log=watch_log)
+        if result != 0:
             if tries < retry + 1:
                 print("Retrying (attempt %d) in 1 minute" % tries)
                 time.sleep(60)
             else:
-                raise subprocess.CalledProcessError(returncode, args)
+                raise subprocess.CalledProcessError(result, args)
         else:
             break
 

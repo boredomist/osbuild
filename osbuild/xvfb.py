@@ -15,17 +15,17 @@
 
 import logging
 import os
+import plog
 import time
 import subprocess
-
-from osbuild import utils
 
 
 def start():
     xvfb_display = _find_free_display()
-    xvfb_proc = subprocess.Popen(args=["Xvfb", xvfb_display],
-                                 stdout=utils.devnull,
-                                 stderr=subprocess.STDOUT)
+
+    xvfb_proc = plog.LoggedProcess(args=["Xvfb", xvfb_display])
+    xvfb_proc.execute()
+
     orig_display = os.environ.get("DISPLAY", None)
     os.environ["DISPLAY"] = xvfb_display
 
@@ -50,11 +50,10 @@ def stop(xvfb_proc, orig_display):
 
 
 def _try_display(display):
-    result = subprocess.call(args=["xdpyinfo", "-display", display],
-                             stdout=utils.devnull,
-                             stderr=subprocess.STDOUT)
+    process = plog.LoggedProcess(["xdpyinfo", "-display", display])
+    process.execute()
 
-    return result == 0
+    return process.wait(print_error=False) == 0
 
 
 def _find_free_display():
