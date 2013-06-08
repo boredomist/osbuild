@@ -1,9 +1,9 @@
 import os
 import subprocess
 
-from devbot import command
-from devbot import distro
-from devbot.plugins import interfaces
+from osbuild import command
+from osbuild import distro
+from osbuild.plugins import interfaces
 
 
 class PackageManager(interfaces.PackageManager):
