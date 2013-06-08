@@ -82,6 +82,7 @@ class PackageManager(interfaces.PackageManager):
             if dep not in result:
                 result.append(dep)
 
+
 distro.register_package_manager("gentoo", PackageManager)
 
 
@@ -91,29 +92,31 @@ class DistroInfo(interfaces.DistroInfo):
     def __init__(self):
         arch = self._get_architecture()
 
+        gnome_version = subprocess.check_output(["gnome-about",
+                                                 "--gnome-version"])
+        gnome_version = gnome_version.split()[1].strip()
+
         self.name = "gentoo"
         self.version = None
-        self.gnome_version = "TODO"
-        self.gstreamer_version = "TODO"
+        self.gnome_version = gnome_version
         self.valid = True
-
-        # TODO: Confirm validity of this
-        self.supported = (arch in [b'i386', b'i686', b'x86_64'])
-
+        self.supported = (arch in ['i386', 'i686', 'x86_64'])
         self.lib_dir = None
 
         if arch == "x86_64":
             self.lib_dir = "lib64"
 
         try:
-            release = subprocess.check_output(["lsb_release", "-r"])
-            release = release.split()[1].strip()
-        except:
-            release = None
+            with open(self._GENTOO_RELEASE_PATH) as f:
+                gentoo_version = f.read().split()[4].strip()
+        except IOError:
+            gentoo_version = None
+
+        if gentoo_version is None:
             self.valid = False
 
-        if release == b'2.1':
-            self.version = "2.1"
+        if gentoo_version and gentoo_version == '2.2':
+            self.version = "2.2"
         else:
             self.supported = False
 
