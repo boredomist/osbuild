@@ -16,7 +16,16 @@ class PackageManager(interfaces.PackageManager):
 Gentoo support is non-official, and very likely broken beyond repair. Please
 report any issues encountered at http://github.com/boredomist/osbuild/issues
 
-You have been warned.""")
+You have been warned.
+
+There are some additional dependencies you need to be able to run this:
+- app-portage/eix
+- app-portage/portage-utils
+
+Also be aware that some packages may require unmasking for your arch. The build
+will fail and give you a list of packages to unmask. Add them to
+/etc/portage/package.accept_keywords and try again.
+""")
 
     def install_packages(self, packages):
         args = ["emerge", "-vu"]
