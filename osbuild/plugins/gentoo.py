@@ -11,6 +11,13 @@ class PackageManager(interfaces.PackageManager):
         self._test = test
         self._interactive = interactive
 
+        print("""~~~~~ WARNING ~~~~~
+
+Gentoo support is non-official, and very likely broken beyond repair. Please
+report any issues encountered at http://github.com/boredomist/osbuild/issues
+
+You have been warned.""")
+
     def install_packages(self, packages):
         args = ["emerge", "-vu"]
 
