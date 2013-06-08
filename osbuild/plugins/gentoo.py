@@ -19,8 +19,7 @@ class PackageManager(interfaces.PackageManager):
 
         args.extend(packages)
 
-        command.run_with_sudo(args, test=self._test,
-                              interactive=self._interactive)
+        command.run_with_sudo(args, test=self._test)
 
     def remove_packages(self, packages):
         args = ["emerge", "-vc"]
@@ -39,8 +38,7 @@ class PackageManager(interfaces.PackageManager):
         if self._interactive:
             args.append("-a")
 
-        command.run_with_sudo(args, test=self._test,
-                              interactive=self._interactive)
+        command.run_with_sudo(args, test=self._test)
 
     # TODO: This currently uses eix, which is non-standard (but common)
     def find_all(self):
