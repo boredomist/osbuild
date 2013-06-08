@@ -86,10 +86,10 @@ will fail and give you a list of packages to unmask. Add them to
             return
         print('_find_deps')
         # FIXME: This command is horrifying
-        f = os.popen("""equery --quiet list emacs |
+        f = os.popen("""equery --quiet list {0} |
                         xargs equery --no-color --quiet depgraph -UAMl |
                         perl -pe 's/\[.*?\]\s+(.*?\/.*?)(-[0-9].*)?$/\1/' |
-                        tail -n +2""")
+                        tail -n +2""".format(package))
 
         dependencies = f.read().strip().split()
         for dep in dependencies:
